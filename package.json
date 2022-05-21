@@ -1,0 +1,14 @@
+{
+  "name": "installer",
+  "version": "1.0.0",
+  "description": "Installer site with node.js,express,social_login,react,mongodb",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "Installer"
+  ],
+  "author": "칠전팔기기",
+  "license": "ISC"
+}
