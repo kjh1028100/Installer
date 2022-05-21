@@ -1,2 +1,3 @@
 ./node_modules
-./babel_config.json
+./babel.config
+./package-lock
