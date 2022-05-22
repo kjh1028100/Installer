@@ -206,6 +206,9 @@ export const KakaoFinishLogin = async (req, res) => {
         },
       })
     ).json();
+    if (!("properties" in userData && "kakao_account" in userData)) {
+      return res.redirect("/login");
+    }
     const {
       kakao_account: {
         profile: { nickname, thumbnail_image_url },
