@@ -62,7 +62,7 @@ export const postLogin = async (req, res) => {
   } = req;
   try {
     //db에 user가 있는지 확인
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ $and: [{ id }, { socialOnly: false }] });
     if (!user) {
       return res
         .status(ErrorStatusCode)
@@ -78,7 +78,7 @@ export const postLogin = async (req, res) => {
     // session에 추가
     req.session.loggedIn = true;
     req.session.user = user;
-    return res.redirect("/");
+    return res.status(ConfirmStatusCode).redirect("/");
   } catch (error) {
     return res
       .status(ErrorStatusCode2)
