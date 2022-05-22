@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 const ErrorStatusCode = 400;
 const ErrorStatusCode2 = 404;
@@ -83,4 +84,89 @@ export const postLogin = async (req, res) => {
       .status(ErrorStatusCode2)
       .render("404", { pageTitle: `${error._message}` });
   }
+};
+
+export const GithubStartLogin = (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: process.env.GH_PUBLIC,
+    scope: "read:user user:email",
+    allow_signup: false,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+export const GithubFinishLogin = async (req, res) => {
+  const baseUrl = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.GH_PUBLIC,
+    client_secret: process.env.GH_SECRET,
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const json = await (
+    await fetch(finalUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+  ).json();
+  if ("access_token" in json) {
+    const { access_token } = json;
+    const apiUrl = "https://api.github.com";
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    const emailData = await (
+      await fetch(`${apiUrl}/user/emails`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    const emailObj = emailData.find(
+      (email) => email.primary === true && email.verified === true
+    );
+    if (!emailObj) {
+      return res.status(ErrorStatusCode).render("user/login", {
+        pageTitle: "Login",
+        errorMessage: "email not found",
+      });
+    }
+    let user = await User.findOne({
+      $or: [{ email: emailObj.email }, { id: userData.login }],
+    });
+    if (!user) {
+      user = await User.create({
+        id: userData.login,
+        email: emailObj.email,
+        username: userData.name,
+        password: "",
+        socialOnly: true,
+        avatarUrl: userData.avatar_url,
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
+  } else {
+    // 메세지 추가
+    return res.status(ErrorStatusCode).render("user/login", {
+      pageTitle: "Login",
+      errorMessage: "Fail Access",
+    });
+  }
+};
+
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
 };
