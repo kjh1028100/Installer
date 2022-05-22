@@ -1,3 +1,5 @@
+import "./db";
+import "./models/User";
 import express from "express";
 import morgan from "morgan";
 import { localsMiddlware } from "./middleware";
