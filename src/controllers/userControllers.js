@@ -166,6 +166,76 @@ export const GithubFinishLogin = async (req, res) => {
   }
 };
 
+export const KakaoStartLogin = (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/authorize";
+  const config = {
+    client_id: process.env.KAKAO_KEY,
+    redirect_uri: process.env.REDIRECT_URL,
+    response_type: "code",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+export const KakaoFinishLogin = async (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/token";
+  const config = {
+    grant_type: "authorization_code",
+    client_id: process.env.KAKAO_KEY,
+    redirect_uri: process.env.REDIRECT_URL,
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const json = await (
+    await fetch(finalUrl, {
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+      },
+    })
+  ).json();
+  if ("access_token" in json) {
+    const { access_token } = json;
+    const apiUrl = "https://kapi.kakao.com/v2/user/me";
+    const userData = await (
+      await fetch(apiUrl, {
+        headers: {
+          Authorization: ` Bearer ${access_token}`,
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+      })
+    ).json();
+    const {
+      kakao_account: {
+        profile: { nickname, thumbnail_image_url },
+        email,
+      },
+    } = userData;
+    let user = await User.findOne({ $or: [{ username: nickname }, { email }] });
+    if (!user) {
+      user = await User.create({
+        // kakao는 아이디 형식이 이메일(require빼고 삽입가능)
+        id: email,
+        password: "",
+        socialOnly: true,
+        username: nickname,
+        email,
+        avatarUrl: thumbnail_image_url,
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect("/");
+  } else {
+    // errorMessage
+    return res.status(ErrorStatusCode).render("user/login", {
+      pageTitle: "Login",
+      errorMessage: "Fail Access Kakao",
+    });
+  }
+};
+
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");

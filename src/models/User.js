@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
-  id: { type: String, trim: true, required: true, maxlength: 10 },
-  email: { type: String, trim: true, required: true },
-  username: { type: String, trim: true, required: true },
-  password: { type: String, trim: true },
+  id: { type: String, trim: true, required: true, maxlength: 20, unique: true },
+  email: { type: String, trim: true, required: true, unique: true },
+  username: { type: String, trim: true, required: true, unique: true },
+  password: { type: String, trim: true, unique: true },
   avatarUrl: { type: String, trim: true },
   socialOnly: { type: Boolean, trime: true },
 });
