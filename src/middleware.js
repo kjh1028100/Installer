@@ -5,6 +5,18 @@ export const localsMiddlware = (req, res, next) => {
   next();
 };
 
-// export const protectedMiddleware=(req,res,next)=>{
+export const protectedMiddleware = (req, res, next) => {
+  if (req.session.loggedIn) {
+    next();
+  } else {
+    return res.render("/");
+  }
+};
 
-// }
+export const publicMiddleware = (req, res, next) => {
+  if (!req.session.loggedIn) {
+    next();
+  } else {
+    return res.render("/");
+  }
+};
