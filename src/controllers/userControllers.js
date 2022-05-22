@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 const ErrorStatusCode = 400;
 const ErrorStatusCode2 = 404;
 const ConfirmStatusCode = 201;
+
 export const home = (req, res) => {
   return res.render("home", { pageTitle: "Home" });
 };
@@ -73,6 +74,9 @@ export const postLogin = async (req, res) => {
         .status(ErrorStatusCode)
         .render(loginPath, { pageTitle, errorMessage: "Confirm password" });
     }
+    // session에 추가
+    req.session.loggedIn = true;
+    req.session.user = user;
     return res.redirect("/");
   } catch (error) {
     return res

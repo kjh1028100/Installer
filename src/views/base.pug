@@ -13,9 +13,17 @@ html(lang="en")
                 ul
                     li
                         a(href="/") Home
-                    li
-                        a(href="/join") Join
-                    li
-                        a(href="/login") Login
+                    if !loggedIn
+                        li
+                            a(href="/join") Join
+                        li
+                            a(href="/login") Login
+                    else
+                        li
+                            a(href=`user/${user._id}/edit`) #{user.username} Edit Profile
+                        li
+                            a(href="/logout") Logout
+                        li
+                            a(href="/notice/upload") Upload
             block content
         include includes/footer
