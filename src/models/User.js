@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String, trim: true, required: true, unique: true },
   password: { type: String, trim: true, unique: true, required: true },
   avatarUrl: { type: String, trim: true },
-  socialOnly: { type: Boolean, trime: true, default: false },
+  socialOnly: { type: Boolean, default: false },
 });
 
 // 1.암호화
