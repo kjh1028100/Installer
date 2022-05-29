@@ -1,6 +1,8 @@
 import "dotenv/config";
 import "./db";
 import "./models/User";
+import "./models/Installer";
+import "./models/Paint";
 import express from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";

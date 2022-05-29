@@ -27,14 +27,14 @@ export const postJoin = async (req, res) => {
       .render(joinPath, { pageTitle, errorMessage: "Disaccord your password" });
   }
   // 중복확인
+  const exists = await User.exists({ $or: [{ id }, { email }] });
+  if (exists) {
+    return res.status(ErrorStatusCode).render(joinPath, {
+      pageTitle,
+      errorMessage: "id or email already account",
+    });
+  }
   try {
-    const exists = await User.exists({ $or: [{ id }, { email }] });
-    if (exists) {
-      return res.status(ErrorStatusCode).render(joinPath, {
-        pageTitle,
-        errorMessage: "id or email already account",
-      });
-    }
     //   user 생성
     await User.create({
       id,
@@ -44,6 +44,7 @@ export const postJoin = async (req, res) => {
     });
     return res.status(ConfirmStatusCode).redirect("/login");
   } catch (error) {
+    // 에러메세지 표현
     return res
       .status(ErrorStatusCode2)
       .render("404", { pageTitle: `${error._message}` });
@@ -148,7 +149,7 @@ export const GithubFinishLogin = async (req, res) => {
       user = await User.create({
         id: userData.login,
         email: emailObj.email,
-        username: userData.name,
+        username: userData.name === null ? "undefined" : userData.name,
         password: "",
         socialOnly: true,
         avatarUrl: userData.avatar_url,
@@ -161,7 +162,7 @@ export const GithubFinishLogin = async (req, res) => {
     // 메세지 추가
     return res.status(ErrorStatusCode).render("user/login", {
       pageTitle: "Login",
-      errorMessage: "Fail Access",
+      errorMessage: "Fail Access Github",
     });
   }
 };

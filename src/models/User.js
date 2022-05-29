@@ -4,10 +4,12 @@ import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
   id: { type: String, trim: true, required: true, maxlength: 20, unique: true },
   email: { type: String, trim: true, required: true, unique: true },
-  username: { type: String, trim: true, required: true, unique: true },
-  password: { type: String, trim: true, unique: true, required: true },
+  username: { type: String, trim: true, required: true },
+  password: { type: String, trim: true },
   avatarUrl: { type: String, trim: true },
   socialOnly: { type: Boolean, default: false },
+  notice: [{ type: mongoose.Schema.Types.ObjectId, ref: "Notice" }],
+  Installer: [{ type: mongoose.Schema.Types.ObjectId, ref: "Installer" }],
 });
 
 // 1.암호화
