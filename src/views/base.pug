@@ -20,7 +20,9 @@ html(lang="en")
                             a(href="/login") Login
                     else
                         li
-                            a(href=`user/${user._id}/edit`) #{user.username} Edit Profile
+                            a(href=`/user/${user._id}`) #{user.username} See Profile
+                        li
+                            a(href=`/user/edit`) #{user.username} Edit Profile
                         li
                             a(href="/logout") Logout
                         li

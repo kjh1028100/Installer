@@ -1,6 +1,6 @@
-import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import User from "../models/User";
 
 const ErrorStatusCode = 400;
 const ErrorStatusCode2 = 404;
@@ -243,4 +243,99 @@ export const KakaoFinishLogin = async (req, res) => {
 export const logout = (req, res) => {
   req.session.destroy();
   return res.redirect("/");
+};
+
+export const see = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.redirect("/");
+    }
+    return res.render("user/see", { pageTitle: `${user.username}`, user });
+  } catch (error) {
+    return res
+      .status(ErrorStatusCode)
+      .render("404", { pageTitle: `${error._message}` });
+  }
+};
+
+export const getEdit = (req, res) => {
+  const {
+    session: { user },
+  } = req;
+  return res.render("user/edit", { pageTitle: `${user.username} Edit Page` });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id, avatarUrl, id: beforeId, username: beforeUsername },
+    },
+    body: { id, email, username },
+    file,
+  } = req;
+  const pagePath = "user/edit";
+  const pageTitle = `${beforeUsername} Edit Page`;
+  // 중복확인
+  if (beforeId === id || beforeUsername === username) {
+    return res
+      .status(ErrorStatusCode)
+      .render(pagePath, { pageTitle, errorMessage: `Already account` });
+  }
+  const exists = await User.exists({ $or: [{ email }, { username }] });
+  if (exists) {
+    return res
+      .status(ErrorStatusCode)
+      .render(pagePath, { pageTitle, errorMessage: `Already account` });
+  }
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      avatarUrl: file ? file.path : avatarUrl,
+      id,
+      email,
+      username,
+    },
+    { new: true }
+  );
+  req.session.user = updateUser;
+  return res.redirect("/user/edit");
+};
+
+export const getChangePassword = async (req, res) => {
+  const {
+    session: { user },
+  } = req;
+  if (!user.socialOnly) {
+    return res.render("user/change-password", { pageTitle: `Change Password` });
+  }
+  return res.redirect("/");
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, confirmPassword },
+  } = req;
+  const user = await User.findById(_id);
+  const pagePath = "user/change-password";
+  const pageTitle = `${user.username} Change Password`;
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res
+      .status(ErrorStatusCode)
+      .render(pagePath, { pageTitle, errorMessage: "Not Account" });
+  }
+  if (newPassword !== confirmPassword) {
+    return res
+      .status(ErrorStatusCode)
+      .render(pagePath, { pageTitle, errorMessage: "Confirm New Password" });
+  }
+  user.password = newPassword;
+  await user.save();
+  return res.status(ConfirmStatusCode).redirect("/user/edit");
 };

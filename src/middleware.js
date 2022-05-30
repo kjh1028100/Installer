@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddlware = (req, res, next) => {
   res.locals.siteName = "Installer";
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -20,3 +22,8 @@ export const publicMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+export const avatarUpload = multer({
+  dest: "uploads/avatar",
+  limits: { fileSize: 30000000 },
+});

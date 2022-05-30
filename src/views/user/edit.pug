@@ -1,0 +1,14 @@
+extends ../base
+block content
+    if errorMessage
+        span=errorMessage
+    form(method="POST",enctype="multipart/form-data")
+        label(for="avatar") Avatar
+        input(type="file",name="avatar",accept="image/*")
+        input(type="text",name="id",value=user.id,placeholder="Input Id")
+        if !user.socialOnly
+            input(type="text",name="email",value=user.email,placeholder="Input Email")
+        input(type="text",name="username",value=user.username,placeholder="Input Username")
+        input(type="submit",value="Edit Profile")
+    if !user.socialOnly
+        a(href="change-password") Change Password &rarr;
