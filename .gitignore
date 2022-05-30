@@ -2,3 +2,4 @@
 ./babel.config
 ./package-lock
 .env
+./uploads
