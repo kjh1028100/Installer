@@ -1,13 +1,15 @@
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 import User from "../models/User";
+import Notice from "../models/Notice";
 
 const ErrorStatusCode = 400;
 const ErrorStatusCode2 = 404;
 const ConfirmStatusCode = 201;
 
-export const home = (req, res) => {
-  return res.render("home", { pageTitle: "Home" });
+export const home = async (req, res) => {
+  const notice = await Notice.find().sort({ "meta.views": "desc" });
+  return res.render("home", { pageTitle: "Home", notice });
 };
 
 export const getJoin = (req, res) => {

@@ -1,0 +1,9 @@
+extends ../base
+
+block content
+    form(method="POST",enctype="multipart/form-data")
+        label(for="avatar")
+        input(type="file",id="avatar",name="avatar",accept="image/jpg")
+        input(type="text", name="title",placeholder="Input title",required,value=`${notice.title}`) 
+        textarea(name="content", cols="30", rows="10",required,id="notice",placeholder=`${notice.description}`) 
+        input(type="submit",value="submit")
