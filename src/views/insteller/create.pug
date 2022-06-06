@@ -1,0 +1,29 @@
+extends ../base
+
+block content
+    div.interior.container
+        section.interior_navbar
+            div.interior_navbar_list
+                div
+                    button.interior_navbar_btn.js-square 사각형
+                    button.interior_navbar_btn.js-circle 원
+                    //- button.interior_navbar_btn 직선
+                div
+                    input.js-range(type="range",min=0,max=10,step=1)
+                div
+                    button.interior_navbar_btn.js-restore 되돌리기
+            div.interior_color
+                button.interior_color_list(style="background-color:#fafafa")
+                button.interior_color_list(style="background-color:#212121")
+                button.interior_color_list(style="background-color:#e53935")
+                button.interior_color_list(style="background-color:#fb8c00")
+                button.interior_color_list(style="background-color:#1e88e5")
+                button.interior_color_list(style="background-color:#8e24aa")
+                button.interior_color_list(style="background-color:#fdd835")
+                button.interior_color_list(style="background-color:#6d4c41")
+                button.interior_color_list(style="background-color:#43a047")
+        canvas#canvas(data-user=user._id)
+        div.interior_btn
+            button.save_btn 저장하기
+block script 
+    script(src="/static/js/js/installer.js") 

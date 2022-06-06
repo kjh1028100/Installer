@@ -1,4 +1,33 @@
+@import "components/navbar.css";
+@import "screen/interior.css";
+
+
+*{
+    padding:0;
+    margin:0;
+}
+
+a{
+    text-decoration: none;
+    color:inherit;
+}
+
+ul{
+    list-style: none;
+}
+
+button:focus,
+button{
+    border:none;
+    cursor:pointer;
+    /* background-color: inherit; */
+}
+
 body{
     background-color: blanchedalmond;
     color:red;
 }
+
+/* .container{
+    padding:20px 50px;
+} */

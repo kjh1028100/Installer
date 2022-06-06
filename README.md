@@ -28,6 +28,10 @@ method:delete /user/delete ->delete profile (특정 유저만 보이기 때문�
 /user/kakao/finish ->social login(kakao)
 /user/kakao/finish ->social login(kakao)
 
+<!-- interior -->
+
+/interior -> choose btn
+
 <!-- 도면X -->
 
 /interior/:id -> see
@@ -60,3 +64,6 @@ method:get /interior/create -> create interior
 그림: 사각형,원,삼각형,직선,곡선 -> 위치 옮기기 -> 색 입히기
 초기화,정확한 높이,넓이 입력시 그림으로 나타내기,확대,축소
 가격(계산기),지우개
+
+<!-- 작성일 간소화 -->
+<!-- 에러메세지 나오게 하는거 고민중 -->

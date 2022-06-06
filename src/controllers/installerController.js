@@ -1,26 +1,33 @@
-// import Installer from "../models/Installer";
+import Installer from "../models/Installer";
+import User from "../models/User";
 
-// export const getSeeInstaller = async (req, res) => {
-//   const {
-//     params: { id },
-//   } = req;
-//   const installer = await Installer.findById(id);
-//   const pageTitle = "installer";
-//   if (!installer) {
-//     return res.render("installer/see", {
-//       pageTitle,
-//       errorMessage: "Not Found",
-//     });
-//   }
-//   return res.render("installer/see", { pageTitle, installer });
-// };
+const ErrorStatusCode = 404;
+const ErrorStatusCode1 = 400;
+const CorrectStatusCode = 300;
+const CorrectStatusCode1 = 304;
 
-// export const getInstallerCreate = (req, res) => {
-//   return res.render("installer/create", { pageTitle: "Create Installer" });
-// };
+export const getInterior = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+  } = req;
+  const exists = await User.findById(_id);
+  if (!exists) {
+    return res.status(ErrorStatusCode1).redirect("/");
+  }
+  return res.render("insteller/choose", { pageTitle: "Choose option" });
+};
 
-// export const postInstallerCreate=(req,res)=>{
-//     const
-// }
-
-// 에러메세지 나오게 하는거 고민중
+export const getInteriorCreate = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+  } = req;
+  const exists = await User.findById(_id);
+  if (!exists) {
+    return res.status(ErrorStatusCode1).redirect("/");
+  }
+  return res.render("insteller/create", { pageTitle: "Create Interior" });
+};

@@ -1,0 +1,49 @@
+.interior{
+    display:flex;
+    justify-content: space-between;
+    /* align-items: center; */
+}
+
+.interior_navbar{
+    border-right: 1px solid black;
+    flex-basis: 20%;
+}
+
+.interior_navbar_list{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.interior_navbar_list div{
+    margin-bottom: 80px;
+}
+
+
+.interior_navbar_btn{
+    border:1px solid black;
+    padding:10px;
+    margin:5px;
+    border-radius: 5px;
+    background-color: cadetblue;
+}
+
+.interior_color{
+    display:flex;
+    justify-content: space-around;
+}
+
+.interior_color__list{
+    width:20px;
+}
+
+#canvas{
+    width:1000px;
+    height:1000px;
+    background-color:white;
+    flex-basis: 60%;
+}
+
+.interior_btn{
+    flex-basis: 10%;
+}
