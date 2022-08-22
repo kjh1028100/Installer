@@ -88,9 +88,44 @@ button{
 
 body{
     background-color: blanchedalmond;
-    color:red;
+    color:inherit;
 }
 
 /* .container{
     padding:20px 50px;
 } */
+
+.save__container{
+    display:none;
+}
+
+main.active{
+    background-color: beige;
+    opacity: 0.3;
+}
+
+.save__container.active
+{
+    display:block;
+    position:absolute;
+    top:50%;
+    left:50%;
+    background-color:grey;
+    height:25%;
+    width:25%;
+    opacity: 1;
+}
+
+.remove{
+    display:none;
+}
+
+.installer__like{
+    color:black;
+    transition: all .5s ease-in-out;
+}
+
+.clicked{
+    color:blue;
+    transform: scale(1.1);
+}

@@ -6,6 +6,7 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         //- link(rel="stylesheet", href="https://unpkg.com/mvp.css")
         link(rel="stylesheet", href="/static/js/css/styles.css")
+        link(rel="stylesheet",href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css")
         title #{pageTitle} | #{siteName}
     body
         main
@@ -13,7 +14,7 @@ html(lang="en")
             nav#navbar
                 ul.navbar__list
                     li
-                        a(href="/") Home
+                        a(href="/").home Home
                     li
                         a(href="/search") search
                     if !loggedIn
@@ -31,7 +32,10 @@ html(lang="en")
                         li
                             a(href="/notice/upload") Upload
                         li
-                            a(href="/interior") Interior
+                            a(href="/installer") installer
             block content
+        div.save__container
+            input(type="text",placeholder="Write Your title...",required,name="title")
+            button Save
         include includes/footer
     block script

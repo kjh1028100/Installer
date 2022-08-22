@@ -23,7 +23,7 @@ userRouter.get("/github/finish", GithubFinishLogin);
 userRouter.get("/kakao/start", publicMiddleware, KakaoStartLogin);
 userRouter.get("/kakao/finish", KakaoFinishLogin);
 // see profile
-userRouter.get("/:id([a-f\\d]{24})", see);
+userRouter.get("/:id([a-z\\d+]{24})", see);
 // edit page
 userRouter
   .route("/edit")

@@ -31,6 +31,7 @@ let circlePating = false;
 let squareKey = "square";
 let circleKey = "circle";
 
+const interiorContaier = document.querySelector(".container");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const squareBtn = document.querySelector(".js-square");
@@ -38,6 +39,58 @@ const circleBtn = document.querySelector(".js-circle");
 const range = document.querySelector(".js-range");
 const restoreBtn = document.querySelector(".js-restore");
 const saveBtn = document.querySelector(".save_btn");
+const saveForm = document.querySelector(".save__container");
+const main = document.querySelector("main");
+
+let imageUrl;
+let id;
+
+const removeContainer = () => {
+  saveForm.classList.remove("active");
+  main.classList.remove("active");
+};
+
+const redirectHome = () => {
+  const home = document.querySelector(".home");
+  home.click();
+};
+
+const handleSubmit = async () => {
+  const input = document.querySelector(".save__container input");
+  const value = input.value;
+  const imgObj = {
+    imageUrl,
+    value,
+  };
+  const response = await fetch(`/api/interior/${id}/save`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(imgObj),
+  });
+  if (response.status === 201) {
+    removeContainer();
+    redirectHome();
+  }
+  if (response.status === 404) {
+    // errorMessage();
+    return;
+  }
+};
+
+const paintContainer = () => {
+  saveForm.classList.add("active");
+  main.classList.add("active");
+};
+
+const handleSaveBtnClick = () => {
+  id = interiorContaier.dataset.userId;
+  imageUrl = canvas.toDataURL("image/png");
+  paintContainer();
+  const titleBtn = document.querySelector(".save__container button");
+  titleBtn.addEventListener("click", handleSubmit);
+};
 
 const handleRestoreBtnClick = () => {
   const check = paints.pop();
@@ -51,19 +104,6 @@ const handleRestoreBtnClick = () => {
     savePaint();
   }
   drawPating();
-};
-
-const handleSaveBtnClick = () => {
-  const { user } = canvas.dataset;
-  const image = canvas.toDataURL();
-  const a = document.createElement("a");
-  a.href = image;
-  fetch(`/api/interior/${user}/save`, {
-    method: "POST",
-    body: {
-      a,
-    },
-  });
 };
 
 const savePaint = () => {
@@ -167,7 +207,7 @@ const loadPaint = () => {
 
 function init() {
   const CANVAS_SIZE = 1000;
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "orange";
   if (canvas) {
     canvas.width = CANVAS_SIZE;
     canvas.height = CANVAS_SIZE;
@@ -178,9 +218,6 @@ function init() {
   if (squareBtn) {
     squareBtn.addEventListener("click", handleSquareBtnClick);
   }
-  //   if (circleBtn) {
-  //     circleBtn.addEventListener("click", handleCircleBtnClick);
-  //   }
   if (restoreBtn) {
     restoreBtn.addEventListener("click", handleRestoreBtnClick);
   }

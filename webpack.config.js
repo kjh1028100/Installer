@@ -1,10 +1,13 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
+const baseUrl = "./src/client/js/";
 
 module.exports = {
   entry: {
-    main: "./src/client/js/main.js",
-    installer: "./src/client/js/installer.js",
+    main: baseUrl + "main.js",
+    installer: baseUrl + "installer.js",
+    register: baseUrl + "register.js",
+    comment: baseUrl + "comment.js",
   },
   mode: "development",
   watch: true,

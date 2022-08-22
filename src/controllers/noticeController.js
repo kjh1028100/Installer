@@ -1,5 +1,10 @@
 import Notice from "../models/Notice";
 
+// export const all = async (req, res) => {
+//   const notice = await Notice.find({});
+//   return res.render("")
+// };
+
 //검색기능
 export const search = async (req, res) => {
   const {
@@ -116,6 +121,7 @@ export const getReport = async (req, res) => {
   const notice = await Notice.findById(id);
   return res.render("notice/report", { pageTitle: `Report Notice`, notice });
 };
+
 //신고기능 보완 필요
 export const postReport = async (req, res) => {
   const {
@@ -140,6 +146,7 @@ export const postReport = async (req, res) => {
   }
   return res.redirect("/");
 };
+
 //댓글기능
 export const getComment = async (req, res) => {
   const {

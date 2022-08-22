@@ -1,9 +1,3 @@
-import "dotenv/config";
-import "./db";
-import "./models/User";
-import "./models/Notice";
-import "./models/Installer";
-import "./models/Paint";
 import express from "express";
 import session from "express-session";
 import MongoStore from "connect-mongo";
@@ -13,7 +7,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import installerRouter from "./routers/installerRouter";
 import noticeRouter from "./routers/noticeRouter";
-// import apiRouter from "./routers/apiRouter";
+import apiRouter from "./routers/apiRouter";
 const app = express();
 const logger = morgan("dev");
 
@@ -40,7 +34,7 @@ app.use(localsMiddlware);
 app.use("/", rootRouter);
 app.use("/user", userRouter);
 app.use("/notice", noticeRouter);
-app.use("/interior", installerRouter);
-// app.use("/api", apiRouter);
+app.use("/installer", installerRouter);
+app.use("/api", apiRouter);
 
 export default app;

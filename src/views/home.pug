@@ -1,6 +1,6 @@
 extends base
-include mixins/notice
+include mixins/installer
 block content
-    if notice
-        each item in notice
-            +notice(item)
+    if installer
+        each item in installer
+            +installer(item)
